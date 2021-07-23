@@ -2,8 +2,8 @@ package chats
 
 import "github.com/IfuryI/ChatAPI/internal/models"
 
-//go:generate mockgen -destination=mocks/repository.go -package=mocks . Repository
 // Repository интерфейс репозитория для работы с чатом
+//go:generate mockgen -destination=mocks/repository.go -package=mocks . Repository
 type Repository interface {
 	CreateChat(chat *models.Chat) (int, error)
 

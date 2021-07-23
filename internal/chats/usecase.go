@@ -2,8 +2,8 @@ package chats
 
 import "github.com/IfuryI/ChatAPI/internal/models"
 
-//go:generate mockgen -destination=mocks/usecase.go -package=mocks . UseCase
 // UseCase интерфейс usecase для работы с логикой запросов чата
+//go:generate mockgen -destination=mocks/usecase.go -package=mocks . UseCase
 type UseCase interface {
 	CreateChat(chat *models.Chat) (int, error)
 
