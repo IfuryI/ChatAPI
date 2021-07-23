@@ -8,13 +8,13 @@ import (
 	"github.com/IfuryI/ChatAPI/internal/users"
 )
 
-// ReviewsUseCase структура usecase рецензий
+// ChatUseCase структура usecase рецензий
 type ChatUseCase struct {
 	chatRepository chats.Repository
 	userRepository users.UserRepository
 }
 
-// NewReviewsUseCase инициализация структуры usecase рецензий
+// NewChatUseCase инициализация структуры usecase рецензий
 func NewChatUseCase(chatRepo chats.Repository, userRepo users.UserRepository) *ChatUseCase {
 	return &ChatUseCase{
 		chatRepository: chatRepo,
@@ -22,7 +22,7 @@ func NewChatUseCase(chatRepo chats.Repository, userRepo users.UserRepository) *C
 	}
 }
 
-// CreateReview создание рецензии
+// CreateChat создание рецензии
 func (chatUC *ChatUseCase) CreateChat(chat *models.Chat) (int, error) {
 	_, err := chatUC.chatRepository.GetChatByName(chat.Name)
 	if err == nil {
@@ -32,7 +32,7 @@ func (chatUC *ChatUseCase) CreateChat(chat *models.Chat) (int, error) {
 	return chatUC.chatRepository.CreateChat(chat)
 }
 
-// CreateReview создание рецензии
+// AddMessageToChat создание рецензии
 func (chatUC *ChatUseCase) AddMessageToChat(message *models.Message) (int, error) {
 	err := chatUC.chatRepository.IsUserInChat(message.UserID, message.ChatID)
 	if err != nil {
@@ -42,7 +42,7 @@ func (chatUC *ChatUseCase) AddMessageToChat(message *models.Message) (int, error
 	return chatUC.chatRepository.AddMessageToChat(message)
 }
 
-// CreateReview создание рецензии
+// GetAllUserChats создание рецензии
 func (chatUC *ChatUseCase) GetAllUserChats(userID string) ([]*models.Chat, error) {
 	_, err := chatUC.userRepository.GetUserByID(userID)
 	if err != nil {
@@ -52,7 +52,7 @@ func (chatUC *ChatUseCase) GetAllUserChats(userID string) ([]*models.Chat, error
 	return chatUC.chatRepository.GetAllUserChats(userID)
 }
 
-// CreateReview создание рецензии
+// GetAllChatMessages создание рецензии
 func (chatUC *ChatUseCase) GetAllChatMessages(chatID string) ([]*models.Message, error) {
 	_, err := chatUC.chatRepository.GetChatByID(chatID)
 	if err != nil {
