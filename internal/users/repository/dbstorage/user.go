@@ -31,19 +31,21 @@ func NewUserRepository(database PgxPoolIface) *UserRepository {
 }
 
 // CreateUser создание пользователя
-func (storage *UserRepository) CreateUser(user *models.User) error {
+func (storage *UserRepository) CreateUser(user *models.User) (int, error) {
 	sqlStatement := `
         INSERT INTO mdb.users (username)
         VALUES ($1)
+		RETURNING id;
     `
+	var newUserID int
 
-	_, err := storage.db.Exec(context.Background(), sqlStatement, user.Username)
+	err := storage.db.QueryRow(context.Background(), sqlStatement, user.Username).Scan(&newUserID)
 
 	if err != nil {
-		return err
+		return 0, err
 	}
 
-	return nil
+	return newUserID, nil
 }
 
 // GetUserByUsername получить информацию о пользователе по имени
@@ -72,7 +74,7 @@ func (storage *UserRepository) GetUserByID(userID string) (*models.User, error) 
 	var user models.User
 
 	sqlStatement := `
-        SELECT id, username, created_at
+        SELECT username, created_at
         FROM mdb.users
         WHERE id = $1
     `
@@ -84,11 +86,13 @@ func (storage *UserRepository) GetUserByID(userID string) (*models.User, error) 
 
 	err = storage.db.
 		QueryRow(context.Background(), sqlStatement, intUserID).
-		Scan(&user.ID, &user.Username, &user.CreatedAt)
+		Scan(&user.Username, &user.CreatedAt)
 
 	if err != nil {
 		return nil, err
 	}
+
+	user.ID = strconv.Itoa(intUserID)
 
 	return &user, nil
 }

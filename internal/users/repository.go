@@ -7,7 +7,7 @@ import (
 // UserRepository интерфейс репозитория для работы с пользователями
 //go:generate mockgen -destination=mocks/repository.go -package=mocks . UserRepository
 type UserRepository interface {
-	CreateUser(user *models.User) error
+	CreateUser(user *models.User) (int, error)
 
 	GetUserByUsername(username string) (*models.User, error)
 

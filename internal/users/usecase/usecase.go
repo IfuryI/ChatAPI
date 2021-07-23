@@ -20,10 +20,10 @@ func NewUsersUseCase(repo users.UserRepository) *UsersUseCase {
 }
 
 // CreateUser создание пользователя
-func (usersUC *UsersUseCase) CreateUser(user *models.User) error {
+func (usersUC *UsersUseCase) CreateUser(user *models.User) (int, error) {
 	_, err := usersUC.userRepository.GetUserByUsername(user.Username) // Проверка существует ли пользователь
 	if err == nil {
-		return errors.New("user already exists")
+		return 0, errors.New("user already exists")
 	}
 
 	return usersUC.userRepository.CreateUser(user)

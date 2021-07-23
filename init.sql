@@ -1,9 +1,11 @@
 \set ON_ERROR_STOP 1
 
+\connect postgres
+
 DROP DATABASE IF EXISTS mdb;
-DROP user IF EXISTS mdb;
+-- DROP user IF EXISTS mdb;
 CREATE DATABASE mdb;
-CREATE user mdb WITH PASSWORD 'mdb';
+-- CREATE user mdb WITH PASSWORD 'mdb';
 
 \connect mdb
 

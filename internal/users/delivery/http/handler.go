@@ -42,12 +42,12 @@ func (h *Handler) CreateUser(ctx *gin.Context) {
 		return
 	}
 
-	err = h.useCase.CreateUser(userData)
+	newUserID, err := h.useCase.CreateUser(userData)
 	if err != nil {
 		h.Log.LogError(ctx, "users", "CreateUser", err)
 		ctx.AbortWithStatus(http.StatusInternalServerError) // 500
 		return
 	}
 
-	ctx.Status(http.StatusCreated) // 201
+	ctx.JSON(http.StatusCreated, newUserID) // 201
 }

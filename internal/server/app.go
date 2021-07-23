@@ -2,7 +2,6 @@ package server
 
 import (
 	"context"
-	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -37,13 +36,13 @@ type App struct {
 func NewApp() *App {
 	accessLogger := logger.NewAccessLogger()
 
-	connStr, connected := os.LookupEnv("DB_CONNECT")
-	if !connected {
-		fmt.Println(os.Getwd())
-		log.Fatal("Failed to read DB connection data")
-	}
+	// connStr, connected := os.LookupEnv("DB_CONNECT")
+	// if !connected {
+	// 	fmt.Println(os.Getwd())
+	// 	log.Fatal("Failed to read DB connection data")
+	// }
 
-	dbpool, err := pgxpool.Connect(context.Background(), connStr)
+	dbpool, err := pgxpool.Connect(context.Background(), "postgres://mdb:mdb@localhost:5432/mdb")
 	if err != nil {
 		log.Fatalf("Unable to connect to database: %v\n", err)
 	}

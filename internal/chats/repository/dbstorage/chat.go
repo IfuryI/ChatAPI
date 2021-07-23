@@ -121,18 +121,24 @@ func (storage *ChatRepository) IsUserInChat(userID string, chatID string) error 
 // GetChatByName получение чата по имени (использую для проверки существования чата)
 func (storage *ChatRepository) GetChatByName(chatName string) (*models.Chat, error) {
 	sqlStatement := `
-        SELECT id, name, created_at
+        SELECT id, created_at
         FROM mdb.chats
         WHERE name = $1
     `
 	chatData := &models.Chat{}
 
+	var intChatID int
+
 	err := storage.db.
 		QueryRow(context.Background(), sqlStatement, chatName).
-		Scan(chatData.ID, chatData.Name, chatData.CreatedAt)
+		Scan(&intChatID, &chatData.CreatedAt)
+
 	if err != nil {
 		return nil, err
 	}
+
+	chatData.ID = strconv.Itoa(intChatID)
+	chatData.Name = chatName
 
 	return chatData, nil
 }
@@ -140,18 +146,25 @@ func (storage *ChatRepository) GetChatByName(chatName string) (*models.Chat, err
 // GetChatByID получение чата по ID (использую для проверки существования чата)
 func (storage *ChatRepository) GetChatByID(chatID string) (*models.Chat, error) {
 	sqlStatement := `
-        SELECT id, name, created_at
+        SELECT name, created_at
         FROM mdb.chats
         WHERE id = $1
     `
 	chatData := &models.Chat{}
 
-	err := storage.db.
-		QueryRow(context.Background(), sqlStatement, chatID).
-		Scan(chatData.ID, chatData.Name, chatData.CreatedAt)
+	intChatID, err := strconv.Atoi(chatID)
 	if err != nil {
 		return nil, err
 	}
+	err = storage.db.
+		QueryRow(context.Background(), sqlStatement, intChatID).
+		Scan(&chatData.Name, &chatData.CreatedAt)
+
+	if err != nil {
+		return nil, err
+	}
+
+	chatData.ID = chatID
 
 	return chatData, nil
 }
