@@ -3,6 +3,7 @@ package http
 import (
 	"fmt"
 	"net/http"
+	"strconv"
 
 	"github.com/IfuryI/ChatAPI/internal/logger"
 	"github.com/IfuryI/ChatAPI/internal/models"
@@ -22,6 +23,11 @@ func NewHandler(useCase users.UseCase, Log *logger.Logger) *Handler {
 		useCase: useCase,
 		Log:     Log,
 	}
+}
+
+// idResponse структура для маршалинга данных (для отправки ID)
+type idResponse struct {
+	ID string `json:"id"`
 }
 
 // CreateUser создание пользователя
@@ -49,5 +55,5 @@ func (h *Handler) CreateUser(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusCreated, newUserID) // 201
+	ctx.JSON(http.StatusCreated, idResponse{ID: strconv.Itoa(newUserID)}) // 201
 }

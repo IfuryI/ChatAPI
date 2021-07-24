@@ -2,6 +2,7 @@ package http
 
 import (
 	"net/http"
+	"strconv"
 
 	"github.com/IfuryI/ChatAPI/internal/chats"
 	"github.com/IfuryI/ChatAPI/internal/logger"
@@ -36,6 +37,11 @@ type chatRequest struct {
 	ChatID string `json:"chat"`
 }
 
+// idResponse структура для маршалинга данных (для отправки ID)
+type idResponse struct {
+	ID string `json:"id"`
+}
+
 // CreateChat создание чата
 func (h *Handler) CreateChat(ctx *gin.Context) {
 	chatData := new(models.Chat)
@@ -54,7 +60,7 @@ func (h *Handler) CreateChat(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusCreated, chatID) // 201
+	ctx.JSON(http.StatusCreated, idResponse{ID: strconv.Itoa(chatID)}) // 201
 }
 
 // AddMessageToChat добавление сообщения в чат
@@ -75,7 +81,7 @@ func (h *Handler) AddMessageToChat(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusCreated, messageID) // 201
+	ctx.JSON(http.StatusCreated, idResponse{ID: strconv.Itoa(messageID)}) // 201
 }
 
 // GetAllUserChats получить все чаты, в которых учавствует пользователь
